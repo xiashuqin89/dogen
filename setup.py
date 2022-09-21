@@ -7,7 +7,7 @@ with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
 setup(
-    name="dogen",
+    name="bkchat-dogen",
     version=version,
     packages=find_packages(exclude=["tests"]),
     package_data={
