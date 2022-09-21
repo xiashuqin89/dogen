@@ -13,7 +13,8 @@ from pykwalify.errors import SchemaError
 
 from dogen.template_helper import TemplateHelper
 from dogen.tools import Tools
-from dogen import version, DEFAULT_SCRIPT_EXEC, DEFAULT_SCRIPT_USER
+from dogen.version import version
+from dogen.constants import DEFAULT_SCRIPT_EXEC, DEFAULT_SCRIPT_USER
 from dogen.errors import Error
 
 SUPPORTED_HASH_ALGORITHMS = ['sha256', 'sha1', 'md5']
