@@ -5,6 +5,7 @@ import subprocess
 from dogen.tools import Tools, Chdir
 from dogen.plugin import Plugin
 
+
 class DistGitPlugin(Plugin):
     @staticmethod
     def info():
@@ -13,15 +14,17 @@ class DistGitPlugin(Plugin):
     @staticmethod
     def inject_args(parser):
         parser.add_argument('--dist-git-enable', action='store_true', help='Enables dist-git plugin')
-        parser.add_argument('--dist-git-assume-yes', action='store_true', help='Skip interactive mode and answer all question with "yes"')
+        parser.add_argument('--dist-git-assume-yes', action='store_true',
+                            help='Skip interactive mode and answer all question with "yes"')
         parser.add_argument('--dist-git-scratch', action='store_true', help='Scratch build')
-        parser.add_argument('--dist-git-tech-preview', action='store_true', help='Change the type of image to tech-preview')
+        parser.add_argument('--dist-git-tech-preview', action='store_true',
+                            help='Change the type of image to tech-preview')
         return parser
 
     def __init__(self, dogen, args):
         super(DistGitPlugin, self).__init__(dogen, args)
 
-        if  not self.args.dist_git_enable:
+        if not self.args.dist_git_enable:
             return
 
         self.repo = None
@@ -40,7 +43,8 @@ class DistGitPlugin(Plugin):
         if not (self.repo and self.branch):
             raise Exception("Dit-git plugin was activated, but repository and branch was not correctly provided")
 
-        self.git = Git(self.log, self.output, os.path.dirname(self.descriptor), self.repo, self.branch, self.args.dist_git_assume_yes)
+        self.git = Git(self.log, self.output, os.path.dirname(self.descriptor), self.repo, self.branch,
+                       self.args.dist_git_assume_yes)
 
         self.git.prepare()
         self.git.clean()
@@ -92,16 +96,19 @@ class DistGitPlugin(Plugin):
                 cmd.append('--scratch')
             subprocess.call(cmd)
 
+
 class Git(object):
     """
     Git support for target directories
     """
+
     @staticmethod
     def repo_info(path):
 
         with Chdir(path):
             if subprocess.check_output(["git", "rev-parse", "--is-inside-work-tree"]).strip() != "true":
-                raise Exception("Directory %s doesn't seem to be a git repository. Please make sure you specified correct path." % path)
+                raise Exception(
+                    "Directory %s doesn't seem to be a git repository. Please make sure you specified correct path." % path)
 
             name = os.path.basename(subprocess.check_output(["git", "rev-parse", "--show-toplevel"]).strip())
             branch = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).strip()
@@ -172,12 +179,15 @@ class Git(object):
         untracked = subprocess.check_output(["git", "ls-files", "--others", "--exclude-standard"])
 
         if untracked:
-            self.log.warn("There are following untracked files: %s. Please review your commit." % ", ".join(untracked.splitlines()))
+            self.log.warn("There are following untracked files: %s. Please review your commit." % ", ".join(
+                untracked.splitlines()))
 
         diffs = subprocess.check_output(["git", "diff-files", "--name-only"])
 
         if diffs:
-            self.log.warn("There are uncommited changes in following files: '%s'. Please review your commit." % ", ".join(diffs.splitlines()))
+            self.log.warn(
+                "There are uncommited changes in following files: '%s'. Please review your commit." % ", ".join(
+                    diffs.splitlines()))
 
         if not self.noninteractive:
             subprocess.call(["git", "status"])

@@ -3,8 +3,8 @@ import subprocess
 
 from six.moves import urllib
 
-class Chdir(object):
 
+class Chdir(object):
     """ Context manager for changing the current working directory """
 
     def __init__(self, newPath):
@@ -17,10 +17,10 @@ class Chdir(object):
     def __exit__(self, etype, value, traceback):
         os.chdir(self.savedPath)
 
+
 class Tools(object):
     @staticmethod
     def repo_info(path):
-
         with Chdir(path):
             name = os.path.basename(subprocess.check_output(["git", "rev-parse", "--show-toplevel"]).strip())
             branch = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).strip()

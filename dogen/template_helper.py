@@ -1,6 +1,7 @@
 import os
 import re
 
+
 class TemplateHelper(object):
     def filename(self, source):
         """ Simple helper to return the file specified name """
@@ -31,7 +32,7 @@ class TemplateHelper(object):
         r = re.sub(r'^(.*)/(.*)$', r'\1-\2-docker', name)
 
         # we don't want -tech-preview to be in component fields
-        r = r.replace("-tech-preview",'')
+        r = r.replace("-tech-preview", '')
 
         return "%s" % r
 
@@ -76,4 +77,3 @@ class TemplateHelper(object):
                 port_list.append(p.get('value'))
 
         return port_list
-

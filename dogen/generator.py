@@ -18,6 +18,7 @@ from dogen.errors import Error
 
 SUPPORTED_HASH_ALGORITHMS = ['sha256', 'sha1', 'md5']
 
+
 class Generator(object):
     def __init__(self, log, args, plugins=[]):
         self.log = log
@@ -81,8 +82,8 @@ class Generator(object):
             self.template = self._fetch_file(self.template)
 
         if not os.path.exists(self.template):
-            raise Error("Template file '%s' could not be found. Please make sure you specified correct path or check if the file was successfully fetched." % self.template)
-
+            raise Error(
+                "Template file '%s' could not be found. Please make sure you specified correct path or check if the file was successfully fetched." % self.template)
 
     def configure(self):
         """
@@ -115,7 +116,8 @@ class Generator(object):
             # Check if the current runnig version of Dogen
             # is the one the descriptor is expecting.
             if required_version != version:
-                raise Error("You try to parse descriptor that requires Dogen version %s, but you run version %s" % (required_version, version))
+                raise Error("You try to parse descriptor that requires Dogen version %s, but you run version %s" % (
+                required_version, version))
 
         ssl_verify = dogen_cfg.get('ssl_verify')
 
@@ -165,7 +167,8 @@ class Generator(object):
         """
         # Fail early if descriptor file is not found
         if not os.path.exists(self.descriptor):
-            raise Error("Descriptor file '%s' could not be found. Please make sure you specified correct path." % self.descriptor)
+            raise Error(
+                "Descriptor file '%s' could not be found. Please make sure you specified correct path." % self.descriptor)
 
         schema_path = os.path.join(self.pwd, "schema", "kwalify_schema.yaml")
         schema = {}
@@ -286,16 +289,19 @@ class Generator(object):
             artifact = source.get('artifact')
 
             if url:
-                self.log.warn("The 'url' key is deprecated, please use 'artifact' for specifying the %s artifact location" % url)
+                self.log.warn(
+                    "The 'url' key is deprecated, please use 'artifact' for specifying the %s artifact location" % url)
 
                 if artifact:
-                    self.log.warn("You specified both: 'artifact' and 'url' for a source file, 'artifact': will be used: %s" % artifact)
+                    self.log.warn(
+                        "You specified both: 'artifact' and 'url' for a source file, 'artifact': will be used: %s" % artifact)
                 else:
                     # Backward compatibility
                     artifact = url
 
             if not artifact:
-                raise Error("Artifact location for one or more sources was not provided, please check your image descriptor!")
+                raise Error(
+                    "Artifact location for one or more sources was not provided, please check your image descriptor!")
 
             self.log.info("Handling artifact '%s'" % artifact)
 
@@ -314,7 +320,8 @@ class Generator(object):
             md5sum = source.get('md5sum')
 
             if md5sum:
-                self.log.warn("The 'md5sum' key is deprecated, please use 'md5' for %s. Or better switch to sha256 or sha1." % artifact)
+                self.log.warn(
+                    "The 'md5sum' key is deprecated, please use 'md5' for %s. Or better switch to sha256 or sha1." % artifact)
 
                 # Backwards compatibility for md5sum
                 if not source.get('md5'):
@@ -334,7 +341,8 @@ class Generator(object):
                     passed = True
             except Exception as e:
                 self.log.debug(str(e))
-                self.log.warn("Local file doesn't match provided checksum, artifact '%s' will be downloaded again" % artifact)
+                self.log.warn(
+                    "Local file doesn't match provided checksum, artifact '%s' will be downloaded again" % artifact)
                 passed = False
 
             if not passed:
@@ -344,14 +352,19 @@ class Generator(object):
 
                     if algorithms:
                         if len(algorithms) > 1:
-                            self.log.warn("You specified multiple algorithms for '%s' artifact, but only '%s' will be used to fetch it from cache" % (artifact, algorithms[0]))
+                            self.log.warn(
+                                "You specified multiple algorithms for '%s' artifact, but only '%s' will be used to fetch it from cache" % (
+                                artifact, algorithms[0]))
 
-                        cached_artifact = cached_artifact.replace('#hash#', source[algorithms[0]]).replace('#algorithm#', algorithms[0])
+                        cached_artifact = cached_artifact.replace('#hash#', source[algorithms[0]]).replace(
+                            '#algorithm#', algorithms[0])
 
                     try:
                         self._fetch_file(cached_artifact, filename)
                     except Exception as e:
-                        self.log.warn("Could not download artifact from cached location: '%s': %s. Please make sure you set the correct value for DOGEN_SOURCES_CACHE (currently: '%s')." % (cached_artifact, str(e), sources_cache))
+                        self.log.warn(
+                            "Could not download artifact from cached location: '%s': %s. Please make sure you set the correct value for DOGEN_SOURCES_CACHE (currently: '%s')." % (
+                            cached_artifact, str(e), sources_cache))
                         self._download_source(artifact, filename, source.get('hint'))
                 else:
                     self._download_source(artifact, filename, source.get('hint'))
@@ -390,6 +403,7 @@ class Generator(object):
         filesum = hash.hexdigest()
 
         if filesum.lower() != checksum.lower():
-            raise Error("The %s computed for the '%s' file ('%s') doesn't match the '%s' value" % (algorithm, filename, filesum, checksum))
+            raise Error("The %s computed for the '%s' file ('%s') doesn't match the '%s' value" % (
+            algorithm, filename, filesum, checksum))
 
         self.log.debug("Hash is correct.")

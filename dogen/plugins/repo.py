@@ -4,6 +4,7 @@ import shutil
 
 from dogen.plugin import Plugin
 
+
 class Repo(Plugin):
     @staticmethod
     def info():
@@ -11,7 +12,8 @@ class Repo(Plugin):
 
     @staticmethod
     def inject_args(parser):
-        parser.add_argument('--repo-files-dir', help='Provides path to directory with *.repo files that should be used to install rpms')
+        parser.add_argument('--repo-files-dir',
+                            help='Provides path to directory with *.repo files that should be used to install rpms')
         return parser
 
     def __init__(self, dogen, args):
@@ -49,7 +51,8 @@ class Repo(Plugin):
             return
 
         if not os.path.isdir(self.repo_dir):
-            raise Exception("Provided path to directory with repo files: '%s' does not exists or is not a directory" % self.repo_dir)
+            raise Exception(
+                "Provided path to directory with repo files: '%s' does not exists or is not a directory" % self.repo_dir)
 
         self.repo_files = glob.glob(os.path.join(self.repo_dir, "*.repo"))
 

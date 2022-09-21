@@ -1,4 +1,3 @@
-
 class Plugin(object):
     def __init__(self, dogen, args):
         self.dogen = dogen

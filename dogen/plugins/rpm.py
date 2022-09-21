@@ -4,10 +4,11 @@ import glob
 
 from dogen.plugin import Plugin
 
+
 class RPM(Plugin):
     @staticmethod
     def info():
-        return "rpm","Support for injecting custom rpms"
+        return "rpm", "Support for injecting custom rpms"
 
     def __init__(self, dogen, args):
         super(RPM, self).__init__(dogen, args)
@@ -18,7 +19,7 @@ class RPM(Plugin):
         Extend the Dogen configuration schema to have a top-level list of
         strings at the 'rpms:' key
         """
-        parent_schema['map']['rpms'] = {'seq':[{'type':'str'}],}
+        parent_schema['map']['rpms'] = {'seq': [{'type': 'str'}], }
 
     def prepare(self, cfg):
         if not os.path.exists(self.rpms_directory):
